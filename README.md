@@ -1,4 +1,4 @@
-# LinkLock - Professional Website Blocker
+# LinkLock - Professional Website Blocker Extension
 
 A sleek and professional Chrome extension for blocking distracting websites to boost productivity.
 
