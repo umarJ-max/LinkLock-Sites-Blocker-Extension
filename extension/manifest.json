@@ -15,16 +15,16 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "ChatGPT Image Aug 30, 2025, 12_08_43 PM.png",
-      "32": "ChatGPT Image Aug 30, 2025, 12_08_43 PM.png",
-      "48": "ChatGPT Image Aug 30, 2025, 12_08_43 PM.png",
-      "128": "ChatGPT Image Aug 30, 2025, 12_08_43 PM.png"
+      "16": "LinkLock Logo.png",
+      "32": "LinkLock Logo.png",
+      "48": "LinkLock Logo.png",
+      "128": "LinkLock Logo.png"
     }
   },
   "icons": {
-    "16": "ChatGPT Image Aug 30, 2025, 12_08_43 PM.png",
-    "32": "ChatGPT Image Aug 30, 2025, 12_08_43 PM.png",
-    "48": "ChatGPT Image Aug 30, 2025, 12_08_43 PM.png",
-    "128": "ChatGPT Image Aug 30, 2025, 12_08_43 PM.png"
+    "16": "LinkLock Logo.png",
+    "32": "LinkLock Logo.png",
+    "48": "LinkLock Logo.png",
+    "128": "LinkLock Logo.png"
   }
 }
