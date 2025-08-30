@@ -46,7 +46,7 @@ function showSites() {
     document.getElementById('sites').innerHTML = sites.map((s, i) => 
       `<div class="site-item">
         <span>${s}</span>
-        <button class="remove-btn" data-index="${i}">×</button>
+        <button class="remove-btn" data-index="${i}">X</button>
       </div>`
     ).join('');
     document.getElementById('count').textContent = sites.length;
