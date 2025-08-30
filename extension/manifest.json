@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "WebGuard - Website Blocker",
-  "version": "1.0.1",
-  "description": "Block distracting websites with quick popup controls",
+  "name": "WebGuard - Strong Website Blocker",
+  "version": "2.0.0",
+  "description": "Powerful website blocker that actually works",
   "permissions": [
     "storage",
     "tabs",
@@ -20,11 +20,14 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"],
-      "run_at": "document_end"
+      "run_at": "document_start"
     }
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "WebGuard - Quick Controls"
+    "default_title": "WebGuard Controls"
+  },
+  "declarative_net_request": {
+    "rule_resources": []
   }
 }
