@@ -6,9 +6,7 @@
   "permissions": [
     "storage",
     "tabs",
-    "activeTab",
-    "declarativeNetRequest",
-    "webRequest"
+    "activeTab"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -26,8 +24,5 @@
   "action": {
     "default_popup": "popup.html",
     "default_title": "WebGuard Controls"
-  },
-  "declarative_net_request": {
-    "rule_resources": []
   }
 }
