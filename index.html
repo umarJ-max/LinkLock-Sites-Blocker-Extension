@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGuard - Website Blocker Dashboard by Umar J</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .bg-shape {
+            position: absolute;
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .bg-shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .bg-shape:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            right: 15%;
+            animation-delay: 3s;
+        }
+
+        .bg-shape:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 30%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1);
+                opacity: 0.1;
+            }
+            50% { 
+                transform: translateY(-30px) rotate(180deg) scale(1.1);
+                opacity: 0.15;
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .brand-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .brand-icon i {
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .brand-text {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+        }
+
+        .creator {
+            font-size: 1rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .creator span {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .blocker-panel {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-section {
+            margin-bottom: 2rem;
+        }
+
+        .input-section h4 {
+            margin-bottom: 1rem;
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .url-input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #f1f5f9;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3);
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .blocked-list {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .blocked-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .blocked-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .remove-btn {
+            background: rgba(239, 68, 68, 0.8);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .status-panel {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .status-indicator {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .status-active {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+            animation: pulse-green 2s ease-in-out infinite;
+        }
+
+        .status-inactive {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+        }
+
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.5); }
+            50% { box-shadow: 0 0 50px rgba(16, 185, 129, 0.8); }
+        }
+
+        .schedule-panel {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .time-input {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #f1f5f9;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .day-btn {
+            padding: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .day-btn.active {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #3b82f6;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .download-section {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            padding: 1.5rem 3rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.4);
+            margin: 1rem;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 50px rgba(139, 92, 246, 0.5);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+        }
+
+        .footer a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-buttons {
+                flex-direction: column;
+            }
+            
+            .brand-text {
+                font-size: 2rem;
+            }
+            
+            .days-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg">
+        <div class="bg-shape"></div>
+        <div class="bg-shape"></div>
+        <div class="bg-shape"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="brand-text">WebGuard</div>
+            </div>
+            <div class="subtitle">Advanced Website Blocking Dashboard</div>
+            <div class="creator">Created by <span>Umar J</span></div>
+        </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <h3><i class="fas fa-ban"></i> Blocked Sites</h3>
+                <div style="font-size: 2rem; color: #ef4444; font-weight: bold;" id="blockedCount">0</div>
+                <p>Currently blocked websites</p>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-clock"></i> Active Sessions</h3>
+                <div style="font-size: 2rem; color: #10b981; font-weight: bold;" id="activeSessionTime">00:00</div>
+                <p>Time blocking active today</p>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="blocker-panel">
+                <h3><i class="fas fa-globe"></i> Website Management</h3>
+                
+                <div class="input-section">
+                    <h4>Add Website to Block</h4>
+                    <div class="url-input-group">
+                        <input type="text" 
+                               class="url-input" 
+                               id="websiteInput" 
+                               placeholder="Enter website URL (e.g., facebook.com)"
+                               onkeypress="handleEnterKey(event)">
+                        <button class="btn btn-primary" onclick="addWebsite()">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-buttons">
+                    <button class="btn btn-danger" id="toggleBtn" onclick="toggleBlocking()">
+                        <i class="fas fa-ban"></i> Start Blocking
+                    </button>
+                    <button class="btn btn-warning" onclick="clearAllSites()">
+                        <i class="fas fa-trash"></i> Clear All
+                    </button>
+                    <button class="btn btn-primary" onclick="exportConfig()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+
+                <h4>Blocked Websites</h4>
+                <div class="blocked-list" id="blockedList">
+                    <div style="text-align: center; color: #64748b; padding: 2rem;">
+                        <i class="fas fa-info-circle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <p>No websites blocked yet. Add some URLs above to get started!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="status-panel">
+                    <div class="status-indicator status-inactive" id="statusIndicator">
+                        <i class="fas fa-power-off"></i>
+                    </div>
+                    <h4 id="statusText">Blocking Inactive</h4>
+                    <p>Web blocking is currently disabled</p>
+                </div>
+
+                <div class="schedule-panel">
+                    <h4><i class="fas fa-calendar"></i> Quick Schedule</h4>
+                    <input type="time" class="time-input" id="startTime" value="09:00">
+                    <input type="time" class="time-input" id="endTime" value="17:00">
+                    
+                    <div class="days-grid">
+                        <div class="day-btn" onclick="toggleDay(this, 'mon')">Mon</div>
+                        <div class="day-btn" onclick="toggleDay(this, 'tue')">Tue</div>
+                        <div class="day-btn" onclick="toggleDay(this, 'wed')">Wed</div>
+                        <div class="day-btn" onclick="toggleDay(this, 'thu')">Thu</div>
+                        <div class="day-btn" onclick="toggleDay(this, 'fri')">Fri</div>
+                        <div class="day-btn" onclick="toggleDay(this, 'sat')">Sat</div>
+                        <div class="day-btn" onclick="toggleDay(this, 'sun')">Sun</div>
+                    </div>
+                    
+                    <button class="btn btn-success" onclick="addSchedule()" style="width: 100%; margin-top: 1rem;">
+                        <i class="fas fa-calendar-plus"></i> Add Schedule
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <h2><i class="fas fa-download"></i> Get Desktop Application</h2>
+            <p style="margin: 1rem 0; font-size: 1.1rem; color: #cbd5e1;">
+                For advanced system-level blocking, download the full desktop application with admin privileges support.
+            </p>
+            <button class="download-btn" onclick="downloadDesktopApp()">
+                <i class="fas fa-desktop"></i> Download Desktop Version
+            </button>
+            <button class="download-btn" onclick="viewGitHub()">
+                <i class="fab fa-github"></i> View on GitHub
+            </button>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                <h4>Instant Blocking</h4>
+                <p>Block websites immediately with one click. No complex setup required.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-clock"></i></div>
+                <h4>Smart Scheduling</h4>
+                <p>Set up automatic blocking schedules for work hours or study sessions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                <h4>Privacy Focused</h4>
+                <p>All data stored locally in your browser. No tracking or data collection.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                <h4>Cross-Platform</h4>
+                <p>Works on desktop, tablet, and mobile devices with responsive design.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-download"></i></div>
+                <h4>Export & Import</h4>
+                <p>Save your configurations and share them across different devices.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h4>Usage Analytics</h4>
+                <p>Track your blocking sessions and monitor productivity improvements.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>
+                Built with ❤️ by <a href="#">Umar J</a> | 
+                <a href="#" onclick="viewGitHub()">GitHub</a> | 
+                <a href="#" onclick="showAbout()">About</a> | 
+                <a href="#" onclick="showHelp()">Help</a>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                WebGuard Dashboard v1.0 - Boost your productivity by eliminating digital distractions
+            </p>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <i class="fas fa-check"></i> <span id="toastMessage">Success!</span>
+    </div>
+
+    <script>
+        // State management
+        let blockedSites = [];
+        let isBlocking = false;
+        let selectedDays = [];
+        let sessionStartTime = null;
+        let sessionDuration = 0;
+
+        // Load data from localStorage
+        function loadData() {
+            const saved = localStorage.getItem('webguard_data');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    blockedSites = data.blockedSites || [];
+                    isBlocking = data.isBlocking || false;
+                    selectedDays = data.selectedDays || [];
+                    updateUI();
+                } catch (e) {
+                    console.error('Error loading data:', e);
+                }
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            const data = {
+                blockedSites,
+                isBlocking,
+                selectedDays,
+                lastSaved: new Date().toISOString()
+            };
+            localStorage.setItem('webguard_data', JSON.stringify(data));
+        }
+
+        // Validate website URL
+        function validateWebsite(url) {
+            url = url.toLowerCase().trim();
+            // Remove protocol
+            url = url.replace(/^https?:\/\//, '');
+            // Remove www
+            url = url.replace(/^www\./, '');
+            // Remove trailing slash
+            url = url.replace(/\/$/, '');
+            
+            // Basic domain validation
+            const domainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$/;
+            
+            return domainRegex.test(url) ? url : null;
+        }
+
+        // Add website to blocked list
+        function addWebsite() {
+            const input = document.getElementById('websiteInput');
+            const url = input.value.trim();
+            
+            if (!url) {
+                showToast('Please enter a website URL', 'warning');
+                return;
+            }
+
+            const validatedUrl = validateWebsite(url);
+            if (!validatedUrl) {
+                showToast('Please enter a valid website URL (e.g., facebook.com)', 'error');
+                return;
+            }
+
+            if (blockedSites.includes(validatedUrl)) {
+                showToast('Website already in blocked list', 'warning');
+                return;
+            }
+
+            blockedSites.push(validatedUrl);
+            input.value = '';
+            updateUI();
+            saveData();
+            showToast(`Added ${validatedUrl} to blocked list`);
+        }
+
+        // Remove website from blocked list
+        function removeWebsite(url) {
+            const index = blockedSites.indexOf(url);
+            if (index > -1) {
+                blockedSites.splice(index, 1);
+                updateUI();
+                saveData();
+                showToast(`Removed ${url} from blocked list`);
+            }
+        }
+
+        // Clear all blocked sites
+        function clearAllSites() {
+            if (blockedSites.length === 0) {
+                showToast('No websites to clear', 'info');
+                return;
+            }
+
+            if (confirm('Are you sure you want to clear all blocked websites?')) {
+                blockedSites = [];
+                updateUI();
+                saveData();
+                showToast('All websites cleared');
+            }
+        }
+
+        // Toggle blocking on/off
+        function toggleBlocking() {
+            if (blockedSites.length === 0) {
+                showToast('Add some websites to block first', 'warning');
+                return;
+            }
+
+            isBlocking = !isBlocking;
+            
+            if (isBlocking) {
+                sessionStartTime = new Date();
+                showToast('Website blocking activated! 🛡️');
+            } else {
+                if (sessionStartTime) {
+                    sessionDuration += Date.now() - sessionStartTime.getTime();
+                }
+                sessionStartTime = null;
+                showToast('Website blocking deactivated');
+            }
+            
+            updateUI();
+            saveData();
+        }
+
+        // Toggle day selection
+        function toggleDay(element, day) {
+            element.classList.toggle('active');
+            const index = selectedDays.indexOf(day);
+            
+            if (index > -1) {
+                selectedDays.splice(index, 1);
+            } else {
+                selectedDays.push(day);
+            }
+            
+            saveData();
+        }
+
+        // Add schedule
+        function addSchedule() {
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            
+            if (!startTime || !endTime) {
+                showToast('Please set both start and end times', 'warning');
+                return;
+            }
+            
+            if (selectedDays.length === 0) {
+                showToast('Please select at least one day', 'warning');
+                return;
+            }
+            
+            showToast(`Schedule added: ${startTime} - ${endTime} for ${selectedDays.join(', ')}`);
+        }
+
+        // Export configuration
+        function exportConfig() {
+            if (blockedSites.length === 0) {
+                showToast('No configuration to export', 'warning');
+                return;
+            }
+
+            const config = {
+                blockedSites,
+                selectedDays,
+                exportDate: new Date().toISOString(),
+                version: '1.0',
+                createdBy: 'Umar J - WebGuard'
+            };
+
+            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            a.href = url;
+            a.download = `webguard-config-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Configuration exported successfully');
+        }
+
+        // Import configuration
+        function importConfig() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const config = JSON.parse(e.target.result);
+                        
+                        if (config.blockedSites && Array.isArray(config.blockedSites)) {
+                            blockedSites = config.blockedSites;
+                            selectedDays = config.selectedDays || [];
+                            updateUI();
+                            saveData();
+                            showToast('Configuration imported successfully');
+                        } else {
+                            showToast('Invalid configuration file', 'error');
+                        }
+                    } catch (error) {
+                        showToast('Error reading configuration file', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        // Update session time display
+        function updateSessionTime() {
+            let totalTime = sessionDuration;
+            
+            if (isBlocking && sessionStartTime) {
+                totalTime += Date.now() - sessionStartTime.getTime();
+            }
+            
+            const hours = Math.floor(totalTime / (1000 * 60 * 60));
+            const minutes = Math.floor((totalTime % (1000 * 60 * 60)) / (1000 * 60));
+            
+            document.getElementById('activeSessionTime').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+        }
+
+        // Update UI elements
+        function updateUI() {
+            // Update blocked count
+            document.getElementById('blockedCount').textContent = blockedSites.length;
+            
+            // Update blocked list
+            const listElement = document.getElementById('blockedList');
+            
+            if (blockedSites.length === 0) {
+                listElement.innerHTML = `
+                    <div style="text-align: center; color: #64748b; padding: 2rem;">
+                        <i class="fas fa-info-circle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <p>No websites blocked yet. Add some URLs above to get started!</p>
+                    </div>
+                `;
+            } else {
+                listElement.innerHTML = blockedSites.map(site => `
+                    <div class="blocked-item">
+                        <div>
+                            <i class="fas fa-ban" style="color: #ef4444; margin-right: 0.5rem;"></i>
+                            ${site}
+                        </div>
+                        <button class="remove-btn" onclick="removeWebsite('${site}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+            
+            // Update status indicator
+            const indicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            const toggleBtn = document.getElementById('toggleBtn');
+            
+            if (isBlocking) {
+                indicator.className = 'status-indicator status-active';
+                indicator.innerHTML = '<i class="fas fa-shield-alt"></i>';
+                statusText.textContent = 'Blocking Active';
+                toggleBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Blocking';
+                toggleBtn.className = 'btn btn-success';
+            } else {
+                indicator.className = 'status-indicator status-inactive';
+                indicator.innerHTML = '<i class="fas fa-power-off"></i>';
+                statusText.textContent = 'Blocking Inactive';
+                toggleBtn.innerHTML = '<i class="fas fa-ban"></i> Start Blocking';
+                toggleBtn.className = 'btn btn-danger';
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            // Set icon and color based on type
+            let icon = 'fas fa-check';
+            let color = 'linear-gradient(135deg, #10b981, #059669)';
+            
+            switch (type) {
+                case 'error':
+                    icon = 'fas fa-times';
+                    color = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                    break;
+                case 'warning':
+                    icon = 'fas fa-exclamation-triangle';
+                    color = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                    break;
+                case 'info':
+                    icon = 'fas fa-info-circle';
+                    color = 'linear-gradient(135deg, #3b82f6, #1d4ed8)';
+                    break;
+            }
+            
+            toast.style.background = color;
+            toast.innerHTML = `<i class="${icon}"></i> <span>${message}</span>`;
+            
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Handle Enter key in input
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                addWebsite();
+            }
+        }
+
+        // Download desktop application
+        function downloadDesktopApp() {
+            showToast('Desktop app download would start here', 'info');
+            // In real implementation, this would download the Python desktop app
+        }
+
+        // View GitHub repository
+        function viewGitHub() {
+            window.open('https://github.com/yourusername/webguard', '_blank');
+        }
+
+        // Show about dialog
+        function showAbout() {
+            alert(`WebGuard - Website Blocker Dashboard v1.0
+
+Created by Umar J
+
+A modern web-based dashboard for managing website blocking. 
+This is the companion web app to the full desktop application.
+
+Features:
+• Browser-based website management
+• Export/Import configurations
+• Scheduling system
+• Real-time status tracking
+• Cross-platform compatibility
+
+For advanced system-level blocking, download the desktop version.`);
+        }
+
+        // Show help dialog
+        function showHelp() {
+            alert(`WebGuard Help
+
+Getting Started:
+1. Add websites to block using the input field
+2. Click "Start Blocking" to activate
+3. Set up schedules for automatic blocking
+4. Export your configuration to save settings
+
+Tips:
+• Enter just the domain name (e.g., facebook.com)
+• Use the schedule feature for work/study hours
+• Export configs to share between devices
+• Download desktop app for system-level blocking
+
+Need more help? Visit our GitHub repository for documentation.`);
+        }
+
+        // Simulate website blocking (browser-level)
+        function simulateBlocking() {
+            if (!isBlocking) return;
+            
+            // This is a demonstration - real blocking would require browser extension
+            const blockedDomains = blockedSites;
+            const currentDomain = window.location.hostname;
+            
+            // In a real browser extension, this would block navigation
+            console.log('Blocking domains:', blockedDomains);
+        }
+
+        // Initialize application
+        function init() {
+            loadData();
+            updateUI();
+            
+            // Update session time every second
+            setInterval(updateSessionTime, 1000);
+            
+            // Simulate blocking check
+            setInterval(simulateBlocking, 5000);
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey || e.metaKey) {
+                    switch (e.key) {
+                        case 'e':
+                            e.preventDefault();
+                            exportConfig();
+                            break;
+                        case 'i':
+                            e.preventDefault();
+                            importConfig();
+                            break;
+                        case 'Enter':
+                            if (e.target.id === 'websiteInput') {
+                                e.preventDefault();
+                                addWebsite();
+                            }
+                            break;
+                    }
+                }
+            });
+            
+            console.log('WebGuard Dashboard initialized by Umar J');
+        }
+
+        // Start the application
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Browser notification support
+        function requestNotificationPermission() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
+
+        function showNotification(title, message) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, {
+                    body: message,
+                    icon: '/favicon.ico',
+                    badge: '/favicon.ico'
+                });
+            }
+        }
+
+        // PWA support
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registered successfully');
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed');
+                });
+        }
+
+        // Auto-save functionality
+        setInterval(function() {
+            saveData();
+        }, 30000); // Save every 30 seconds
+
+        // Backup to cloud (simulation)
+        function backupToCloud() {
+            // Simulate cloud backup
+            showToast('Configuration backed up to cloud', 'info');
+        }
+
+        // Advanced features for premium version
+        function showPremiumFeatures() {
+            alert(`Premium Features Available:
+
+🔒 Advanced Security
+• Deep packet inspection blocking
+• VPN/Proxy detection
+• Incognito mode blocking
+
+📊 Detailed Analytics  
+• Time spent on blocked sites
+• Productivity scoring
+• Weekly/Monthly reports
+
+👨‍👩‍👧‍👦 Family Controls
+• Multiple user profiles
+• Parental controls
+• Time limits per user
+
+☁️ Cloud Sync
+• Cross-device synchronization
+• Team management
+• Remote configuration
+
+Contact Umar J for premium licensing.`);
+        }
+    </script>
+</body>
+</html>
