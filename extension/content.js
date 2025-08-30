@@ -1,5 +1,6 @@
 function blockSite() {
-  document.documentElement.innerHTML = `
+  document.documentElement.innerHTML = '';
+  document.write(`
     <html><head><title>Site Blocked</title></head>
     <body style="margin:0;padding:0;background:#000;color:#fff;font-family:Arial;display:flex;align-items:center;justify-content:center;height:100vh;">
       <div style="text-align:center;">
@@ -8,7 +9,9 @@ function blockSite() {
         <p style="font-size:16px;opacity:0.7;">${window.location.hostname}</p>
       </div>
     </body></html>
-  `;
+  `);
+  document.close();
+  window.stop();
 }
 
 function checkBlocked() {
