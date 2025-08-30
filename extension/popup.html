@@ -1,188 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      width: 320px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #1e293b, #334155);
-      color: white;
-    }
-    
-    .header {
-      padding: 16px;
-      text-align: center;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    .header h3 {
-      font-size: 18px;
-      font-weight: 600;
-    }
-    
-    .status-card {
-      margin: 16px;
-      padding: 12px;
-      border-radius: 12px;
-      text-align: center;
-      transition: all 0.3s;
-    }
-    
-    .status-card.active {
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid #10b981;
-    }
-    
-    .status-card.inactive {
-      background: rgba(239, 68, 68, 0.15);
-      border: 1px solid #ef4444;
-    }
-    
-    .status-indicator {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 8px;
-    }
-    
-    .status-indicator.active { background: #10b981; }
-    .status-indicator.inactive { background: #ef4444; }
-    
-    .stats {
-      display: flex;
-      justify-content: space-between;
-      margin: 16px;
-      gap: 12px;
-    }
-    
-    .stat-item {
-      flex: 1;
-      text-align: center;
-      padding: 12px 8px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 8px;
-    }
-    
-    .stat-number {
-      font-size: 20px;
-      font-weight: bold;
-      display: block;
-    }
-    
-    .stat-label {
-      font-size: 11px;
-      opacity: 0.7;
-      margin-top: 4px;
-    }
-    
-    .controls {
-      padding: 0 16px 16px;
-    }
-    
-    .btn {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 8px;
-      border: none;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 14px;
-    }
-    
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    
-    .btn-toggle {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-      color: white;
-      margin-bottom: 12px;
-    }
-    
-    .btn-toggle.active {
-      background: linear-gradient(135deg, #10b981, #059669);
-    }
-    
-    .btn-secondary {
-      background: rgba(255,255,255,0.1);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    
-    .quick-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-    }
-    
-    .btn-small {
-      flex: 1;
-      padding: 8px;
-      font-size: 12px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    .add-site {
-      margin: 0 16px 16px;
-    }
-    
-    .add-site input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 6px;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      font-size: 14px;
-    }
-    
-    .add-site input::placeholder {
-      color: rgba(255,255,255,0.5);
-    }
+    body { width: 300px; padding: 20px; font-family: Arial, sans-serif; }
+    .status { margin-bottom: 15px; padding: 10px; border-radius: 5px; text-align: center; }
+    .active { background: #d4edda; color: #155724; }
+    .inactive { background: #f8d7da; color: #721c24; }
+    input { width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 3px; }
+    button { width: 100%; padding: 10px; margin: 5px 0; border: none; border-radius: 3px; cursor: pointer; }
+    .toggle { background: #007bff; color: white; }
+    .toggle.active { background: #28a745; }
+    .clear { background: #dc3545; color: white; }
+    .sites { max-height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+    .site { padding: 5px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+    .remove { background: #dc3545; color: white; border: none; padding: 2px 6px; border-radius: 3px; cursor: pointer; }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h3>🛡️ WebGuard</h3>
-  </div>
+  <h3>Website Blocker</h3>
   
-  <div class="status-card" id="statusCard">
-    <span class="status-indicator" id="statusIndicator"></span>
-    <span id="statusText">Checking...</span>
-  </div>
+  <div id="status" class="status inactive">Blocking: OFF</div>
   
-  <div class="stats">
-    <div class="stat-item">
-      <span class="stat-number" id="blockedCount">0</span>
-      <div class="stat-label">Blocked Sites</div>
-    </div>
-    <div class="stat-item">
-      <span class="stat-number" id="blockedToday">0</span>
-      <div class="stat-label">Blocked Today</div>
-    </div>
-  </div>
+  <input type="text" id="siteInput" placeholder="Enter site to block (e.g. facebook.com)">
   
-  <div class="add-site">
-    <input type="text" id="siteInput" placeholder="Add site to block (e.g. facebook.com)">
-  </div>
+  <button id="toggleBtn" class="toggle">Start Blocking</button>
   
-  <div class="controls">
-    <button id="toggleBtn" class="btn btn-toggle">Start Blocking</button>
-    <button id="dashboardBtn" class="btn btn-secondary">Open Dashboard</button>
-    
-    <div class="quick-actions">
-      <button id="pauseBtn" class="btn btn-small">Pause 5min</button>
-      <button id="clearBtn" class="btn btn-small">Clear All</button>
-    </div>
-  </div>
+  <div class="sites" id="sitesList"></div>
+  
+  <button id="clearBtn" class="clear">Clear All Sites</button>
   
   <script src="popup.js"></script>
 </body>
