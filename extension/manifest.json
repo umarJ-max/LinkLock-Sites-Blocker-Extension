@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
   "name": "WebGuard - Website Blocker",
-  "version": "1.0",
-  "description": "Block websites with advanced controls",
+  "version": "1.0.1",
+  "description": "Block distracting websites with quick popup controls",
   "permissions": [
     "storage",
     "tabs",
-    "webNavigation",
+    "activeTab",
     "declarativeNetRequest"
   ],
   "host_permissions": [
@@ -18,20 +18,12 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "run_at": "document_end"
     }
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "WebGuard"
-  },
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "ruleset_1",
-        "enabled": true,
-        "path": "rules.json"
-      }
-    ]
+    "default_title": "WebGuard - Quick Controls"
   }
 }
