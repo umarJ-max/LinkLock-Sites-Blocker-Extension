@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { width: 300px; padding: 15px; font-family: Arial, sans-serif; }
+        .status { text-align: center; margin-bottom: 15px; }
+        .active { color: #10b981; }
+        .inactive { color: #ef4444; }
+        button { width: 100%; padding: 10px; margin: 5px 0; border: none; border-radius: 5px; cursor: pointer; }
+        .toggle-btn { background: #3b82f6; color: white; }
+        .dashboard-btn { background: #6b7280; color: white; }
+    </style>
+</head>
+<body>
+    <div class="status">
+        <h3>WebGuard Status</h3>
+        <p id="status" class="inactive">Inactive</p>
+    </div>
+    
+    <button id="toggle" class="toggle-btn">Start Blocking</button>
+    <button id="dashboard" class="dashboard-btn">Open Dashboard</button>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
