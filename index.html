@@ -788,6 +788,8 @@
             if (isBlocking) {
                 sessionStartTime = new Date();
                 showToast('Website blocking activated! 🛡️');
+                // Re-enable blocking when turned on
+                enableRealBlocking();
             } else {
                 if (sessionStartTime) {
                     sessionDuration += Date.now() - sessionStartTime.getTime();
@@ -1067,36 +1069,41 @@ Need more help? Visit our GitHub repository for documentation.`);
 
         // Simulate blocking when extension is not available
         function simulateBlocking() {
-            if (isBlocking && blockedSites.length > 0) {
-                // Check current URL against blocked sites
-                const currentDomain = window.location.hostname;
-                const isCurrentSiteBlocked = blockedSites.some(site => 
-                    currentDomain.includes(site) || site.includes(currentDomain)
-                );
-                
-                if (isCurrentSiteBlocked) {
-                    document.body.innerHTML = `
-                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; font-family: Arial, sans-serif;">
-                            <i class="fas fa-ban" style="font-size: 4rem; margin-bottom: 1rem;"></i>
-                            <h1>Website Blocked</h1>
-                            <p>This website has been blocked by WebGuard</p>
-                            <p>Domain: ${currentDomain}</p>
-                        </div>
-                    `;
+            // Override window.open to block new tabs/windows
+            const originalOpen = window.open;
+            window.open = function(url, ...args) {
+                if (isBlocking && url && blockedSites.some(site => url.includes(site) || site.includes(url))) {
+                    showNotification('WebGuard', `Blocked: ${url}`);
+                    showToast('Blocked attempt to open: ' + url, 'warning');
+                    return null;
                 }
-                
-                // Monitor for navigation to blocked sites
-                const originalOpen = window.open;
-                window.open = function(url, ...args) {
-                    if (url && blockedSites.some(site => url.includes(site))) {
-                        showToast('Blocked attempt to open: ' + url, 'warning');
-                        return null;
+                return originalOpen.call(this, url, ...args);
+            };
+            
+            // Override location changes
+            const originalAssign = window.location.assign;
+            window.location.assign = function(url) {
+                if (isBlocking && blockedSites.some(site => url.includes(site) || site.includes(url))) {
+                    showNotification('WebGuard', `Navigation blocked: ${url}`);
+                    showToast('Navigation blocked: ' + url, 'warning');
+                    return;
+                }
+                return originalAssign.call(this, url);
+            };
+            
+            // Monitor clicks on links
+            document.addEventListener('click', function(e) {
+                if (isBlocking && e.target.tagName === 'A' && e.target.href) {
+                    const url = e.target.href;
+                    if (blockedSites.some(site => url.includes(site) || site.includes(url))) {
+                        e.preventDefault();
+                        showNotification('WebGuard', `Link blocked: ${url}`);
+                        showToast('Link blocked: ' + url, 'warning');
                     }
-                    return originalOpen.call(this, url, ...args);
-                };
-                
-                showToast('Simulation mode - Install extension for full blocking', 'info');
-            }
+                }
+            });
+            
+            showToast('Browser blocking active - Limited to current tab', 'info');
         }
 
         // Initialize application
