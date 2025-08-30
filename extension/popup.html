@@ -2,17 +2,35 @@
 <html>
 <head>
   <style>
-    body { width: 200px; padding: 10px; }
-    input, button { width: 100%; margin: 5px 0; padding: 5px; }
-    .site-item { display: flex; justify-content: space-between; align-items: center; margin: 2px 0; }
-    .remove-btn { width: 20px; height: 20px; background: red; color: white; border: none; cursor: pointer; }
+    body { width: 280px; padding: 0; margin: 0; font-family: 'Segoe UI', Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .header { background: rgba(0,0,0,0.2); padding: 15px; text-align: center; }
+    .header h2 { margin: 0; font-size: 18px; }
+    .brand { font-size: 12px; opacity: 0.8; margin-top: 5px; }
+    .content { padding: 15px; }
+    input { width: 100%; padding: 10px; border: none; border-radius: 8px; margin-bottom: 10px; font-size: 14px; }
+    button { width: 100%; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    #add { background: #2ed573; color: white; margin-bottom: 15px; }
+    #add:hover { background: #26d467; }
+    .site-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.1); padding: 8px 12px; margin: 5px 0; border-radius: 6px; }
+    .remove-btn { width: 25px; height: 25px; background: #ff4757; color: white; border: none; border-radius: 50%; cursor: pointer; font-weight: bold; }
+    .remove-btn:hover { background: #ff3838; }
+    .stats { background: rgba(0,0,0,0.2); padding: 10px; margin-top: 15px; border-radius: 8px; text-align: center; font-size: 12px; }
   </style>
 </head>
 <body>
-  <h3>Site Blocker</h3>
-  <input id="site" placeholder="Enter site (e.g. facebook.com)">
-  <button id="add">Add Site</button>
-  <div id="sites"></div>
+  <div class="header">
+    <h2>🚫 Site Blocker</h2>
+    <div class="brand">by Umar J</div>
+  </div>
+  <div class="content">
+    <input id="site" placeholder="Enter URL or domain (e.g. https://instagram.com)">
+    <button id="add">Block Site</button>
+    <button id="blockCurrent" style="background:#ff6b6b;margin-bottom:10px;">Block Current Site</button>
+    <div id="sites"></div>
+    <div class="stats">
+      <div>Blocked Sites: <span id="count">0</span></div>
+    </div>
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>

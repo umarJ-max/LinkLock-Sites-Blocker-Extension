@@ -1,14 +1,43 @@
+function extractDomain(input) {
+  try {
+    if (input.startsWith('http://') || input.startsWith('https://')) {
+      return new URL(input).hostname.replace(/^www\./i, '');
+    }
+    return input.replace(/^www\./i, '').replace(/^https?:\/\//i, '').split('/')[0];
+  } catch {
+    return input.replace(/^www\./i, '');
+  }
+}
+
 document.getElementById('add').onclick = function() {
-  const site = document.getElementById('site').value;
-  if (site) {
+  const input = document.getElementById('site').value.trim();
+  if (input) {
+    const domain = extractDomain(input);
     chrome.storage.local.get(['blockedSites'], (result) => {
       const sites = result.blockedSites || [];
-      sites.push(site);
-      chrome.storage.local.set({blockedSites: sites});
-      showSites();
+      if (!sites.includes(domain)) {
+        sites.push(domain);
+        chrome.storage.local.set({blockedSites: sites});
+        showSites();
+      }
     });
     document.getElementById('site').value = '';
   }
+};
+
+document.getElementById('blockCurrent').onclick = function() {
+  chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+    const domain = extractDomain(tabs[0].url);
+    chrome.storage.local.get(['blockedSites'], (result) => {
+      const sites = result.blockedSites || [];
+      if (!sites.includes(domain)) {
+        sites.push(domain);
+        chrome.storage.local.set({blockedSites: sites});
+        showSites();
+        chrome.tabs.reload(tabs[0].id);
+      }
+    });
+  });
 };
 
 function showSites() {
@@ -20,6 +49,7 @@ function showSites() {
         <button class="remove-btn" data-index="${i}">×</button>
       </div>`
     ).join('');
+    document.getElementById('count').textContent = sites.length;
   });
 }
 

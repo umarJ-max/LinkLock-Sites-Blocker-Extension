@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Simple Site Blocker",
+  "name": "Umar J Site Blocker",
   "version": "1.0",
+  "description": "Professional website blocker for enhanced productivity - Created by Umar J",
   "permissions": ["storage", "activeTab", "tabs"],
   "host_permissions": ["<all_urls>"],
   "content_scripts": [{
