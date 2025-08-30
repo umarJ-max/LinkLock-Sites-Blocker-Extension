@@ -21,6 +21,9 @@
     if (blocked) return;
     blocked = true;
     
+    // Notify background script
+    chrome.runtime.sendMessage({ action: 'siteBlocked' });
+    
     // Stop all loading immediately
     if (window.stop) window.stop();
     
